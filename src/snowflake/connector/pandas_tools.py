@@ -129,7 +129,7 @@ def write_pandas(conn: 'SnowflakeConnection',
             os.remove(chunk_path)
     copy_into_sql = ('COPY INTO {location} /* Python:snowflake.connector.pandas_tools.write_pandas() */ '
                      'FROM @"{stage_name}" FILE_FORMAT=(TYPE=PARQUET COMPRESSION={compression}) '
-                     'MATCH_BY_COLUMN_NAME=CASE_SENSITIVE  PURGE=TRUE ON_ERROR={on_error}').format(
+                     'MATCH_BY_COLUMN_NAME=CASE_INSENSITIVE  PURGE=TRUE ON_ERROR={on_error}').format(
         location=location,
         stage_name=stage_name,
         compression=compression_map[compression],
