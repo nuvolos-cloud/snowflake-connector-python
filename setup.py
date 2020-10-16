@@ -129,8 +129,10 @@ if _ABLE_TO_COMPILE_EXTENSIONS:
                     ext.extra_compile_args.append('-isystem' + numpy.get_include())
                     ext.extra_compile_args.append('-std=c++11')
                     ext.extra_compile_args.append('-D_GLIBCXX_USE_CXX11_ABI=0')
-
-                ext.library_dirs.append(os.path.join(current_dir, self.build_lib, 'snowflake', 'connector'))
+                ext_dir = os.path.join(current_dir, self.build_lib, 'snowflake', 'connector')
+                if not os.path.exists(ext_dir):
+                    os.makedirs(ext_dir)
+                ext.library_dirs.append(ext_dir)
                 ext.extra_link_args += self._get_arrow_lib_as_linker_input()
 
                 # sys.platform for linux used to return with version suffix, (i.e. linux2, linux3)
@@ -154,6 +156,8 @@ if _ABLE_TO_COMPILE_EXTENSIONS:
             for lib in libs_to_bundle:
                 source = '{}/{}'.format(self._get_arrow_lib_dir(), lib)
                 build_dir = os.path.join(self.build_lib, 'snowflake', 'connector')
+                if not os.path.exists(build_dir):
+                    os.makedirs(build_dir)
                 copy(source, build_dir)
 
         def _get_arrow_lib_as_linker_input(self):
